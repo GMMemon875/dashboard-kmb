@@ -12,7 +12,7 @@ const Dashboard = () => {
     const fatchAppointment = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/v1/appointment/getall",
+          `${import.meta.env.VITE_API_KEY}/api/v1/appointment/getall`,
           { withCredentials: true }
         );
         // console.log(data.appointments);
@@ -32,7 +32,7 @@ const Dashboard = () => {
     const fatchData = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:4000/api/v1/user/doctors`,
+          `${import.meta.env.VITE_API_KEY}/api/v1/user/doctors`,
           {
             withCredentials: true,
           }
@@ -49,7 +49,9 @@ const Dashboard = () => {
   const handleUpdateStatus = async (appointmentid, status) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:4000/api/v1/appointment/update/${appointmentid}`,
+        `${
+          import.meta.env.VITE_API_KEY
+        }/api/v1/appointment/update/${appointmentid}`,
         { status },
         { withCredentials: true }
       );
@@ -81,11 +83,11 @@ const Dashboard = () => {
                 <p>Hello ,</p>
                 <h5>{admin && `${admin.firstName},${admin.lastName}`}</h5>
               </div>
-
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Provident delectus fuga illo doloremque enim, et totam in quo
-                fugit eaque
+                The KMB INTERNATIONAL dashboard offers a smart, centralized view
+                to manage all web development, media, hostel operations, and
+                social media marketing. Stay organized, track progress, and make
+                informed decisions in one place.
               </p>
             </div>
           </div>

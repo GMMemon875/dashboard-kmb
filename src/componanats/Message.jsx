@@ -12,7 +12,7 @@ const Message = () => {
     const fetchMessages = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:4000/api/v1/message/getall`,
+          `${import.meta.env.VITE_API_KEY}/api/v1/message/getall`,
           { withCredentials: true }
         );
 
@@ -29,7 +29,7 @@ const Message = () => {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:4000/api/v1/message/delete/${id}`, // ✅ ID ko URL men pass kiya gaya hai
+        `${import.meta.env.VITE_API_KEY}/api/v1/message/delete/${id}`, // ✅ ID ko URL men pass kiya gaya hai
         {
           method: "DELETE",
         }

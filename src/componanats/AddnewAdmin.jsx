@@ -23,7 +23,7 @@ const AddnewAdmin = () => {
     try {
       await axios
         .post(
-          "http://localhost:4000/api/v1/user/admin/addnew",
+          `${import.meta.env.VITE_API_KEY}/api/v1/user/admin/addnew`,
           {
             firstName,
             lastName,

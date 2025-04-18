@@ -86,8 +86,7 @@ const Dashboard = () => {
               <p>
                 The KMB INTERNATIONAL dashboard offers a smart, centralized view
                 to manage all web development, media, hostel operations, and
-                social media marketing. Stay organized, track progress, and make
-                informed decisions in one place.
+                social media marketing.
               </p>
             </div>
           </div>

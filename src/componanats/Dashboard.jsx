@@ -71,6 +71,15 @@ const Dashboard = () => {
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;
   }
+  const [expandedId, setExpandedId] = useState(null);
+
+  const toggleExpand = (id) => {
+    if (expandedId === id) {
+      setExpandedId(null);
+    } else {
+      setExpandedId(id);
+    }
+  };
 
   return (
     <>
@@ -100,71 +109,121 @@ const Dashboard = () => {
             <h4>{Doctors.length}</h4>
           </div>
         </div>
-        <div className="banner">
-          <h5>Appointment</h5>
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Date</th>
-                <th>Service</th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Visited</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointment && appointment.length > 0 ? (
-                appointment.map((appointment) => {
-                  return (
+        <div className="appointments-wrapper">
+          <h5 className="section-title">Appointments</h5>
+
+          {/* Desktop Table */}
+          <div className="appointment-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Date</th>
+                  <th>Service</th>
+                  <th>Doctor</th>
+                  <th>Status</th>
+                  <th>Visited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appointment && appointment.length > 0 ? (
+                  appointment.map((appointment) => (
                     <tr key={appointment._id}>
                       <td>{`${appointment.firstName} ${appointment.lastName}`}</td>
-                      <td>{`${appointment.appointment_date.substring(
-                        0,
-                        16
-                      )}`}</td>
-                      <td> {`${appointment.department}`} </td>
-                      <td>{`${appointment.doctor.firstName}   ${appointment.doctor.lastName}`}</td>
+                      <td>{appointment.appointment_date.substring(0, 16)}</td>
+                      <td>{appointment.department}</td>
+                      <td>{`${appointment.doctor.firstName} ${appointment.doctor.lastName}`}</td>
                       <td>
                         <select
-                          className={
-                            appointment.status === "Pending"
-                              ? "value-pending"
-                              : appointment.status === "Rejected"
-                              ? "value-rejected"
-                              : "value-accepted"
-                          }
+                          className={`status-select ${appointment.status.toLowerCase()}`}
                           value={appointment.status}
                           onChange={(e) =>
                             handleUpdateStatus(appointment._id, e.target.value)
                           }
                         >
-                          <option value="Pending" className="value-pending">
-                            Pending
-                          </option>
-                          <option value="Rejected" className="value-rejected">
-                            Recjected
-                          </option>
-                          <option value="Accepted" className="value-accepted">
-                            Accepted
-                          </option>
+                          <option value="Pending">Pending</option>
+                          <option value="Rejected">Rejected</option>
+                          <option value="Accepted">Accepted</option>
                         </select>
                       </td>
                       <td>
-                        {appointment.hasVisited === true ? (
+                        {appointment.hasVisited ? (
                           <GoCheckCircleFill className="green" />
                         ) : (
                           <AiFillCloseCircle className="red" />
                         )}
                       </td>
                     </tr>
-                  );
-                })
-              ) : (
-                <h1>No Appointment</h1>
-              )}
-            </tbody>
-          </table>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="no-appointment">
+                      No Appointments
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Accordion */}
+          <div className="appointment-mobile">
+            {appointment && appointment.length > 0 ? (
+              appointment.map((appointment) => (
+                <div className="appointment-item" key={appointment._id}>
+                  <div className="appointment-summary">
+                    <span>{`${appointment.firstName} ${appointment.lastName}`}</span>
+                    <button
+                      className="toggle-btn"
+                      onClick={() => toggleExpand(appointment._id)}
+                    >
+                      {expandedId === appointment._id ? "-" : "+"}
+                    </button>
+                  </div>
+
+                  {expandedId === appointment._id && (
+                    <div className="appointment-details">
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {appointment.appointment_date.substring(0, 16)}
+                      </p>
+                      <p>
+                        <strong>Service:</strong> {appointment.department}
+                      </p>
+                      <p>
+                        <strong>Doctor:</strong>{" "}
+                        {`${appointment.doctor.firstName} ${appointment.doctor.lastName}`}
+                      </p>
+                      <p>
+                        <strong>Status:</strong>
+                        <select
+                          className={`status-select ${appointment.status.toLowerCase()}`}
+                          value={appointment.status}
+                          onChange={(e) =>
+                            handleUpdateStatus(appointment._id, e.target.value)
+                          }
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Rejected">Rejected</option>
+                          <option value="Accepted">Accepted</option>
+                        </select>
+                      </p>
+                      <p>
+                        <strong>Visited:</strong>
+                        {appointment.hasVisited ? (
+                          <GoCheckCircleFill className="green" />
+                        ) : (
+                          <AiFillCloseCircle className="red" />
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <h2 className="no-appointment">No Appointments</h2>
+            )}
+          </div>
         </div>
       </section>
     </>
